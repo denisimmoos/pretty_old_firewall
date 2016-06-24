@@ -2,4 +2,4 @@
 
 This Script is pretty old and should not be used anymore ...
 
-I just added it to demonstrate my BASH-skills :)
+I just added it to demonstrate my BASH-skills and my knowledge of iptables ... ;)
