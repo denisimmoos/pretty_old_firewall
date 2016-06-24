@@ -1,0 +1,139 @@
+#!/bin/bash
+# FILE: rc.firewall
+# DESC: Main firewall script
+#
+# Written by Denis Immoos redpantyhose@yahoo.com
+# This firewall-script is an adaptation of: 
+#
+# "DENIS FIREWALL SCRIPT (1.0.26) 
+#
+# DATE: 07.09.2006
+# AUTOR: Denis Immoos
+# set -x
+
+# VARIABLES
+FW_DIR='/etc/firewall'
+FW_INCLUDE_DIR="${FW_DIR}/include"
+
+# INCLUDE VARIABLES
+. ${FW_INCLUDE_DIR}/variables.inc
+
+# INCLUDE FUNCTIONS
+. ${FW_INCLUDE_DIR}/functions.inc
+
+# CASE CONSTRUCT
+
+case ${1} in
+  start)
+    
+    echo -n "START FIREWALL ... "
+    
+    {
+      # Include start
+      f_include ${FW_INCLUDE_DIR}/start.sh
+    } 1> ${FW_LOG_FILE}
+
+	# SYMBOLIC LINK
+	${LN} -sf ${FW_LOG_FILE} ${FW_LOG_DIR}/firewall.log 1>${DEVNULL}
+
+    echo "[OK]"
+
+    # TRUE
+    exit 0
+  ;;
+  stop)
+    
+    echo -n "STOP FIREWALL ... "
+    
+    {
+      # Include stop
+      f_include ${FW_INCLUDE_DIR}/stop.sh
+    } 1> ${FW_LOG_FILE}
+
+	# SYMBOLIC LINK
+	${LN} -sf ${FW_LOG_FILE} ${FW_LOG_DIR}/firewall.log 1>${DEVNULL}
+    
+    echo "[OK]"
+    
+    # TRUE
+    exit 0
+  ;;
+  restart)
+    # :.)
+    ${0} start
+  ;;
+  help)
+    
+    # Include help
+    f_include ${FW_INCLUDE_DIR}/help.sh
+    
+    # TRUE
+    exit 0
+  ;;
+  backup)
+    
+    # Include backup 
+    f_include ${FW_INCLUDE_DIR}/backup.sh
+
+    # TRUE
+    exit 0
+  ;;
+  clearall)
+    
+    # Include backup 
+    f_include ${FW_INCLUDE_DIR}/backup.sh
+
+    # Include clearlog
+    f_include ${FW_INCLUDE_DIR}/clearlog.sh
+
+    # Include clearint
+    f_include ${FW_INCLUDE_DIR}/clearint.sh
+
+    # TRUE
+    exit 0
+  ;;
+  clearint)
+    
+    # Include backup 
+    f_include ${FW_INCLUDE_DIR}/backup.sh
+
+    # Include clearint
+    f_include ${FW_INCLUDE_DIR}/clearint.sh
+
+    # TRUE
+    exit 0
+  ;;
+  clearlog)
+    
+    # Include backup 
+    f_include ${FW_INCLUDE_DIR}/backup.sh
+
+    # Include clearlog
+    f_include ${FW_INCLUDE_DIR}/clearlog.sh
+
+    # TRUE
+    exit 0
+  ;;
+  restore)
+    
+    # Include restore
+    # f_include does not work here
+    . ${FW_INCLUDE_DIR}/restore.sh restore ${2}
+
+    # TRUE
+    exit 0
+  ;;
+  *)
+    echo 
+    echo "usage: $0 start | stop | restart | help | clearlog | clearint | clearall | backup | restore FILE"
+    echo
+    
+    # TRUE
+    exit 0
+  ;;
+esac
+
+# TRUE
+exit 0
+
+#__END__
